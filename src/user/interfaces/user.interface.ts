@@ -1,5 +1,7 @@
 export interface IUser {
-    id: number;
+    id: string;
     name: string;
     address: string;
+    email: string;
+    isTfa: boolean;
 }

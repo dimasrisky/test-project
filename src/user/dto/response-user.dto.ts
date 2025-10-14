@@ -22,4 +22,9 @@ export class ResponseUserDto {
     @ApiProperty({ description: 'Status Tfa', example: false })
     @IsBoolean()
     isTfa: boolean;
+
+    @Expose()
+    @ApiProperty({ description: 'url qr code', example: '' })
+    @IsString()
+    otpAuthUrl: string | null;
 }

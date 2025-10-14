@@ -24,13 +24,25 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<ResponseLoginDto>{
         const user = await this.checkCredential(loginDto.email, loginDto.password)
-        return { accessToken: this.jwtService.sign({ id: user.id, email: user.email }) }
+        if(user.isTfa){
+            return { accessToken: '', tfaRequired: true }
+        }else{
+            return { accessToken: this.jwtService.sign({ id: user.id, email: user.email, address: user.address, name: user.name, isTfa: user.isTfa }) }
+        }
+    }
+
+    async getCurrentUser(user: IUser){
+       const users = await this.databaseService.get('/users')
+       const findUser = users.find(e => e.id === user.id)
+       return findUser
     }
 
     async register(registerDto: RegisterDto): Promise<ResponseRegisterDto>{
         const _createUser = {
             ...registerDto,
             isTfa: false,
+            tfaSecret: null,
+            otpAuthUrl: null,
             id: uuidV4()
         }
 

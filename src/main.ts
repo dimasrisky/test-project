@@ -12,6 +12,11 @@ async function bootstrap() {
     transform: true,
   }));
 
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('First Swagger')
     .setDescription('API description')
