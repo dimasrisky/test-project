@@ -3,11 +3,9 @@ import { ResponseUserDto } from './dto/response-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { v4 as uuidV4 } from 'uuid';
 import { DatabaseService } from 'src/database/database.service';
-import { EnableTfaDto } from './dto/enable-tfa.dto';
 import * as speakeasy from 'speakeasy';
 import { IUser } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
-import { find } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -48,7 +46,6 @@ export class UserService {
         const users = await this.databaseService.get('/users')
         const findUser = users.find((e: { email: string; }) => e.email === email)
         if(!findUser) throw new NotFoundException('user not found', 'notFound')
-            console.log(findUser);
         const verify = speakeasy.totp.verify({
             secret: findUser.tfaSecret,
             encoding: 'base32',
