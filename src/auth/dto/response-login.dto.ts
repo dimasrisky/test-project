@@ -7,7 +7,7 @@ export class ResponseLoginDto {
     @ApiProperty({ description: 'Session ID'})
     @IsString()
     sessionId: string;
-
+    
     @Expose()
     @ApiProperty({ description: 'Access Token'})
     @IsString()

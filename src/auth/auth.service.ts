@@ -44,15 +44,31 @@ export class AuthService {
 
     async login(loginDto: LoginDto): Promise<ResponseLoginDto>{
         const user = await this.checkCredential(loginDto.email, loginDto.password)
+        const sessionId = uuidV4()
         if(user.isTfa){
-            return { sessionId: '', accessToken: '', refreshToken: '', tfaRequired: true }
+            return { sessionId: '', accessToken: '', refreshToken: '', tfaRequired: user.isTfa }
         }else{
-            const sessionId = uuidV4()
-            const payload = { id: user.id, email: user.email, address: user.address, name: user.name, isTfa: user.isTfa }
-            const accessToken = this.jwtService.sign(payload, { expiresIn: this.configService.get<string>('JWT_EXPIRES')})
-            const refreshToken = this.jwtService.sign(payload, { expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES') })
-            await this.databaseService.push('/refreshTokens[]', { sessionId, userId: user.id, refreshToken, revoked: false })
-            return { sessionId, accessToken, refreshToken}
+            return { 
+                sessionId,
+                accessToken: this.jwtService.sign({ id: user.id, email: user.email, address: user.address, name: user.name, isTfa: user.isTfa }),
+                refreshToken: this.jwtService.sign({ id: user.id, email: user.email, address: user.address, name: user.name, isTfa: user.isTfa }),
+                tfaRequired: user.isTfa
+            }
+        }
+    }
+
+    async refreshToken(refreshTokenDto: RefreshTokenDto){
+        const users = await this.databaseService.get('/users')
+        const findUser = users.find(user => user.email === refreshTokenDto.email)
+        const sessionId = uuidV4()
+        if(!findUser) throw new BadRequestException('invalidCredentials', 'Kredensial tidak valid')
+        const verify = this.jwtService.verify(refreshTokenDto.refreshToken)
+        if(!verify) throw new BadRequestException('invalidCredentials', 'Kredensial tidak valid')
+        
+        return {
+            sessionId,
+            accessToken: this.jwtService.sign({ id: findUser.id, email: findUser.email, address: findUser.address, name: findUser.name, isTfa: findUser.isTfa }),
+            refreshToken: this.jwtService.sign({ id: findUser.id, email: findUser.email, address: findUser.address, name: findUser.name, isTfa: findUser.isTfa }),
         }
     }
 
