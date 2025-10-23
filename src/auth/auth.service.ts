@@ -57,21 +57,6 @@ export class AuthService {
         }
     }
 
-    async refreshToken(refreshTokenDto: RefreshTokenDto){
-        const users = await this.databaseService.get('/users')
-        const findUser = users.find(user => user.email === refreshTokenDto.email)
-        const sessionId = uuidV4()
-        if(!findUser) throw new BadRequestException('invalidCredentials', 'Kredensial tidak valid')
-        const verify = this.jwtService.verify(refreshTokenDto.refreshToken)
-        if(!verify) throw new BadRequestException('invalidCredentials', 'Kredensial tidak valid')
-        
-        return {
-            sessionId,
-            accessToken: this.jwtService.sign({ id: findUser.id, email: findUser.email, address: findUser.address, name: findUser.name, isTfa: findUser.isTfa }),
-            refreshToken: this.jwtService.sign({ id: findUser.id, email: findUser.email, address: findUser.address, name: findUser.name, isTfa: findUser.isTfa }),
-        }
-    }
-
     async logout(logoutDto: LogoutDto): Promise<void>{
         const tokens = await this.databaseService.get('/refreshTokens')
         const index = tokens.findIndex((token: { sessionId: string; refreshToken: string; revoked: boolean; }) => token.sessionId === logoutDto.sessionId && logoutDto.refreshToken === token.refreshToken && token.revoked === false)
