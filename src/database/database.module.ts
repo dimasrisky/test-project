@@ -15,7 +15,9 @@ import { ConfigService } from '@nestjs/config';
         username: config.get('DATABASE_USERNAME'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_NAME'),
-        synchronize: true,
+        synchronize: false,
+        migrations: ['src/database/migrations/*.ts'],
+        logging: true,
       })
     }),
   ],
