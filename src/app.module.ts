@@ -7,6 +7,7 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { XenditModule } from './xendit/xendit.module';
 
 @Module({
   imports: [
@@ -15,7 +16,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true
     }),
     UserModule, 
-    AuthModule, DatabaseModule
+    AuthModule, 
+    DatabaseModule,
+    XenditModule
   ],
   controllers: [AppController],
   providers: [AppService],

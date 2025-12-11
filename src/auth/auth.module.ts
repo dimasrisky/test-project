@@ -11,8 +11,8 @@ import { DatabaseModule } from 'src/database/database.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET_KEY'),
-        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES') },
+        secret: configService.get<string>('JWT_SECRET_KEY') || 'default-secret',
+        signOptions: { expiresIn: (configService.get<string>('JWT_EXPIRES') || '1h') as any },
       }),
       inject: [ConfigService],
     }),

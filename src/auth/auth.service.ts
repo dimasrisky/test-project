@@ -36,7 +36,7 @@ export class AuthService {
         const payload = { id: user.id, email: user.email, address: user.address, name: user.name, isTfa: user.isTfa }
         return { 
             sessionId,
-            accessToken: this.jwtService.sign(payload, { expiresIn: this.configService.get<string>('JWT_EXPIRES')}),
+            accessToken: this.jwtService.sign(payload, { expiresIn: (this.configService.get<string>('JWT_EXPIRES') || '1h') as any }),
             refreshToken: refreshTokenDto.refreshToken
         }
     }
