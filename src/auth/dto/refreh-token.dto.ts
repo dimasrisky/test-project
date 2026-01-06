@@ -7,7 +7,11 @@ export class RefreshTokenDto {
     @IsEmail()
     email: string;
 
-    @ApiProperty({ description: 'refreshToken', example: ''})
+    @ApiProperty({ description: 'session id', example: ''})
     @IsString()
-    refreshToken: string;
+    sessionId: string;
+
+    @ApiProperty({ description: 'refresh token', example: ''})
+    @IsString()
+    refreshToken: string;    
 }
