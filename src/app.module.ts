@@ -6,12 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-<<<<<<< Updated upstream
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { XenditModule } from './xendit/xendit.module';
-=======
 import { loggerMiddleware } from './middlewares/logger.middleware';
->>>>>>> Stashed changes
 
 @Module({
   imports: [
