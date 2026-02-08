@@ -4,10 +4,11 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { XenditModule } from './xendit/xendit.module';
 import { loggerMiddleware } from './middlewares/logger.middleware';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { loggerMiddleware } from './middlewares/logger.middleware';
     UserModule, 
     AuthModule, 
     DatabaseModule,
-    XenditModule
+    XenditModule,
+    GatewayModule
   ],
   controllers: [AppController],
   providers: [AppService],

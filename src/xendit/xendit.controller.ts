@@ -27,9 +27,8 @@ export class XenditController {
         @Body() webhookDto: WebhookCallbackDto,
         @Headers('x-callback-token') webhookToken: string
     ): Promise<boolean>{
-        if(!webhookToken){
-            throw new UnauthorizedException()
-        }else if(webhookToken != this.configService.get('XENDIT_WEBHOOK_VERIFICATION_TOKEN')){
+        if(!webhookToken || webhookToken != this.configService.get('XENDIT_WEBHOOK_VERIFICATION_TOKEN')){
+            console.log('masuksini');
             throw new UnauthorizedException()
         }
         return this.xenditService.webhookCallback(webhookDto)
