@@ -6,15 +6,26 @@ import { DatabaseService } from 'src/database/database.service';
 import * as speakeasy from 'speakeasy';
 import { IUser } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { Exchange } from 'src/bases/enums/exchange.enum';
+import { RoutingKey } from 'src/bases/enums/routingkey.enum';
 
 @Injectable()
 export class UserService {
     constructor(
         private readonly databaseService: DatabaseService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private amqpConnection: AmqpConnection
     ){}
 
     async findAll(): Promise<ResponseUserDto[]>{
+        const result = await this.amqpConnection.request({
+            exchange: Exchange.BOOKS,
+            routingKey: RoutingKey.LIST_BOOK_QUEUE,
+            payload: { name: 'dimas' }
+        })
+        await this.amqpConnection.publish(Exchange.BOOKS, RoutingKey.BOOK_SAYHI, { name: 'dimas' })
+        console.log(result);
         return await this.databaseService.get('/users')
     }
 

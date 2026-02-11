@@ -9,18 +9,20 @@ import { DatabaseModule } from './database/database.module';
 import { XenditModule } from './xendit/xendit.module';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import { GatewayModule } from './gateway/gateway.module';
+import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
+    RabbitmqModule,
     PassportModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    UserModule, 
-    AuthModule, 
+    UserModule,
+    AuthModule,
     DatabaseModule,
     XenditModule,
-    GatewayModule
+    GatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],
