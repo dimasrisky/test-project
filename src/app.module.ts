@@ -10,6 +10,8 @@ import { XenditModule } from './xendit/xendit.module';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import { GatewayModule } from './gateway/gateway.module';
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
+import { ScraperModule } from './scraper/scraper.module';
+import { ScheduleModule } from '@nestjs/schedule'
 
 @Module({
   imports: [
@@ -18,11 +20,13 @@ import { RabbitmqModule } from './rabbitmq/rabbitmq.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     AuthModule,
     DatabaseModule,
     XenditModule,
     GatewayModule,
+    ScraperModule,
   ],
   controllers: [AppController],
   providers: [AppService],
